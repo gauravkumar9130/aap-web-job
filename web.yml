@@ -18,7 +18,7 @@
         service: "{{ item }}"
         permanent: true
         state: enabled
-        immidiate: true
+        immediate: true
       loop:
         - http
         - https
