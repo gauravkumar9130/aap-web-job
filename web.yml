@@ -7,6 +7,11 @@
       ansible.builtin.dnf:
         name: httpd
         state: present
+        
+    - name: copy jinja2 template
+      ansible.builtin.copy:
+        src: hello.j2
+        dest: /var/www/html/index.html
 
     - name: Open firewall ports for HTTP and HTTPS
       ansible.posix.firewalld:
