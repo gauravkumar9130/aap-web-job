@@ -1,0 +1,32 @@
+---
+- name: Setup and Configure Apache Web Server
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Apache (httpd) package
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Open firewall ports for HTTP and HTTPS
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immidiate: true
+      loop:
+        - http
+        - https
+      notify: Reload firewalld
+
+    - name: Start and enable the httpd service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Reload firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
